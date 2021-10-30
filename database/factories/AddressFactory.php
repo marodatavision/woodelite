@@ -14,7 +14,12 @@ class AddressFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'street_1' => $this->faker->streetAddress,
+            'street_2',
+            'postal_code',
+            'city',
+            'state',
+            'country',
         ];
     }
 }
