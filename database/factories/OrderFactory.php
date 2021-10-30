@@ -14,7 +14,8 @@ class OrderFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'order_description' => $this->faker->realText(20, 250),
+            'order_comments' => $this->faker->optional()->realText(100, 300),
         ];
     }
 }

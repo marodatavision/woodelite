@@ -14,7 +14,10 @@ class SupplierFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'supplier_firstname' => $this->faker->firstname,
+            'supplier_lastname' => $this->faker->lastname,
+            'supplier_company' => $this->faker->optional()->company,
+            'supplier_comments' => $this->faker->optional()->realText($this->faker->numberBetween(100, 300)),
         ];
     }
 }

@@ -15,11 +15,11 @@ class AddressFactory extends Factory
     {
         return [
             'street_1' => $this->faker->streetAddress,
-            'street_2',
-            'postal_code',
-            'city',
-            'state',
-            'country',
+            'street_2' => $this->faker->optional()->streetAddress,
+            'postal_code' => $this->faker->postcode,
+            'city' => $this->faker->city,
+            'state' => $this->faker->optional()->state,
+            'country' => $this->faker->country,
         ];
     }
 }
