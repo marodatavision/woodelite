@@ -15,7 +15,7 @@ class CreateSquaretimbersTable extends Migration
     {
         Schema::create('squaretimbers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('woodlog_id');
+            $table->foreignId('woodlog_id')->nullable();
             $table->decimal('timber_price');
             $table->decimal('timber_height');
             $table->decimal('timber_width');

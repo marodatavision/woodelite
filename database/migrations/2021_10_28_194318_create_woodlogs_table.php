@@ -15,7 +15,7 @@ class CreateWoodlogsTable extends Migration
     {
         Schema::create('woodlogs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id');
+            $table->foreignId('order_id')->nullable();
             $table->decimal('log_price');
             $table->string('log_owner')->nullable();
             $table->decimal('log_diameter');

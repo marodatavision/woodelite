@@ -15,8 +15,8 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id');
-            $table->foreignId('inventoryitem_id');
+            $table->foreignId('customer_id')->nullable();
+            $table->foreignId('inventoryitem_id')->nullable();
             $table->string('order_description');
             $table->text('order_comments')->nullable();
             $table->timestamps();

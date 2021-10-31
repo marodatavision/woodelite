@@ -15,7 +15,7 @@ class CreateInventoryitemsTable extends Migration
     {
         Schema::create('inventoryitems', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('supplier_id');
+            $table->foreignId('supplier_id')->nullable();
             $table->string('item_name');
             $table->string('item_description');
             $table->text('item_comments')->nullable();

@@ -15,7 +15,7 @@ class CreatePaymentinfosTable extends Migration
     {
         Schema::create('paymentinfos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id');
+            $table->foreignId('customer_id')->nullable();
             $table->string('bank_name');
             $table->string('iban');
             $table->string('bic');
