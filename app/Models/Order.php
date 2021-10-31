@@ -13,4 +13,24 @@ class Order extends Model
         'order_description',
         'order_comments'
     ];
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
+    public function woodlogs()
+    {
+        return $this->hasMany(Woodlog::class);
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
+    public function inventoryitems()
+    {
+        return $this->belongsToMany(Inventoryitem::class);
+    }
 }

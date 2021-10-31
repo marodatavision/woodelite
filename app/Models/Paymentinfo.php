@@ -18,4 +18,9 @@ class Paymentinfo extends Model
         'receiver_phone',
         'tax_number'
     ];
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
 }

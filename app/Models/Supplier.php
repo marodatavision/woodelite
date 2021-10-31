@@ -15,4 +15,14 @@ class Supplier extends Model
         'supplier_company',
         'supplier_comments'
     ];
+
+    public function addresses()
+    {
+        return $this->morphMany(Address::class, 'addressable');
+    }  
+
+    public function inventoryitems()
+    {
+        return $this->hasMany(Inventoryitem::class);
+    }
 }

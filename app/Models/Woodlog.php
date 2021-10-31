@@ -17,4 +17,14 @@ class Woodlog extends Model
         'wood_type',
         'wood_quality'
     ];
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
+
+    public function squaretimbers()
+    {
+        return $this->hasMany(Squaretimber::class);
+    }
 }

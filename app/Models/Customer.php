@@ -15,4 +15,14 @@ class Customer extends Model
         'customer_company',
         'customer_comments',
     ];
+
+    public function addresses()
+    {
+        return $this->morphMany(Address::class, 'addressable');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

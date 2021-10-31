@@ -15,4 +15,14 @@ class Invoice extends Model
         'invoice_number',
         'invoice_discount'
     ];
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
+
+    public function paymentinfo()
+    {
+        return $this->belongsTo(PaymentInfo::class);
+    }
 }

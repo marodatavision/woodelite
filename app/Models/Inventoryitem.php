@@ -16,4 +16,14 @@ class Inventoryitem extends Model
         'item_price',
         'package_units'
     ];
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
+    }
+
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class);
+    }
 }

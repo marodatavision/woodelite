@@ -17,4 +17,9 @@ class Address extends Model
         'state',
         'country',
     ];
+
+    public function addressable()
+    {
+        return $this->morphTo();
+    }
 }
