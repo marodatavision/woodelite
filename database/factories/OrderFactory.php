@@ -15,7 +15,7 @@ class OrderFactory extends Factory
     {
         return [
             'order_description' => $this->faker->realText(20, 250),
-            'order_comments' => $this->faker->optional()->realText(100, 300),
+            'order_comments' => $this->faker->optional()->realText($this->faker->numberBetween(100, 300)),
         ];
     }
 }
