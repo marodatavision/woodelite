@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Paymentinfo extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'bank_name',
+        'iban',
+        'bic',
+        'receiver_name',
+        'receiver_email',
+        'receiver_phone',
+        'tax_number'
+    ];
 }
