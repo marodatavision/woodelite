@@ -94,7 +94,7 @@ class DatabaseSeeder extends Seeder
             for ($i=0; $i < $this->faker->numberBetween(2, $iterations); $i++) { 
                 try{
                     $randomBelongsToElement = $this->faker->randomElement($belongsToCollection);
-                    $hasManyElement->call_user_func($relation)->save($randomBelongsToElement);
+                    $hasManyElement->{$relation}()->save($randomBelongsToElement);
                 }
                 catch(Exception $e){
                     echo 'relation of ' . get_class($hasManyElement) . ' ' 
