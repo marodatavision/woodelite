@@ -23,6 +23,6 @@ class Invoice extends Model
 
     public function paymentinfo()
     {
-        return $this->belongsTo(PaymentInfo::class);
+        return $this->belongsTo(Paymentinfo::class);
     }
 }
