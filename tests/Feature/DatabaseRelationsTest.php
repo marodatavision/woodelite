@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Models\Address;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\Woodlog;
 use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -44,10 +46,11 @@ class DatabaseRelationsTest extends TestCase
     
     }
 
+
     public function test_customer_orders_relation()
     {
-        $customers = Customer::factory(3)->make();
-        $orders = Order::factory(10)->make();
+        $customers = Customer::factory(3)->create();
+        $orders = Order::factory(10)->create();
 
         $this->relateMany($customers, $orders, 'orders', 3);
 
@@ -63,7 +66,49 @@ class DatabaseRelationsTest extends TestCase
                 $this->assertEquals(null, $order->customer);
             }
         });
+    }
 
 
+    public function test_customer_address_relation()
+    {
+        $customers = Customer::factory(3)->create();
+        $addresses = Address::factory(10)->create();
+
+        $this->relateMany($customers, $addresses, 'addresses', 3);
+
+        $customers->each(function($customer){
+            $this->assertGreaterThan(0, $customer->addresses->count());
+        });
+
+        $addresses->each(function($address){
+            if($address->customer){
+                $this->assertEquals('App\Models\Customer', get_class($address->customer));
+            }
+            else{
+                $this->assertEquals(null, $address->customer);
+            }
+        });
+    }
+
+
+    public function test_order_woodlog_relation()
+    {
+        $orders = Order::factory(3)->create();
+        $woodlogs = Woodlog::factory(10)->create();
+
+        $this->relateMany($orders, $woodlogs, 'woodlogs', 3);
+
+        $orders->each(function($order){
+            $this->assertGreaterThan(0, $order->woodlogs->count());
+        });
+
+        $woodlogs->each(function($woodlog){
+            if($woodlog->order){
+                $this->assertEquals('App\Models\Order', get_class($woodlog->order));
+            }
+            else{
+                $this->assertEquals(null, $woodlog->order);
+            }
+        });
     }
 }
