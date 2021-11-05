@@ -18,7 +18,7 @@ class Squaretimber extends Model
         'timber_moisture'
     ];
 
-    public function Woodlog()
+    public function woodlog()
     {
         return $this->belongsTo(Woodlog::class);
     }
