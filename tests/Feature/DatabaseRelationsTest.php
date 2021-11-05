@@ -34,25 +34,24 @@ class DatabaseRelationsTest extends TestCase
      */
     public function relateMany(Collection $hasManyCollection, Collection $belongsToCollection, String $relation, Int $iterations)
     {
-        
-        $hasManyCollection->each(function($hasManyElement)use($belongsToCollection, $relation, $iterations){
-            for ($i=0; $i < $iterations; $i++) { 
-                $randomBelongsToElement = $belongsToCollection->random();
-                try{
-                    $hasManyElement->{$relation}()->save($randomBelongsToElement);
-                    $randomBelongsToElementIndex = $belongsToCollection->search(function($belongsToElement)use($randomBelongsToElement){
-                        return $belongsToElement->id === $randomBelongsToElement->id;
-                    });
-                    $belongsToCollection->forget($randomBelongsToElementIndex);
-                }
-                catch(Exception $e){
-                    echo 'relation of ' . get_class($hasManyElement) . ' ' 
-                    . $hasManyElement->id . ' with ' . get_class($randomBelongsToElement) . ' ' 
-                    . $randomBelongsToElement->id .  ' failed!';
-                }
+        if($hasManyCollection->count() < $belongsToCollection->count()) {
+            $this->recursiveHelper($belongsToCollection, $hasManyCollection, $relation);   
+        }
+        else{
+            echo "the hasManyCollection has to contain less items then the belongsToCollection!";
+        }
+    }
+
+    public function recursiveHelper($belongsToCollection, $hasManyCollection, $relation){
+        for ($i=0; $i < $belongsToCollection->count(); $i++) { 
+            if($i < $hasManyCollection->count()){
+                $hasManyCollection->get($i)->{$relation}()->save($belongsToCollection->get($i));
             }
-        });
-    
+            else if($belongsToCollection->count() > $i){
+                $belongsToCollection->shift($i);
+                $this->recursiveHelper($belongsToCollection, $hasManyCollection, $relation);
+            }
+        }
     }
 
 
@@ -68,12 +67,7 @@ class DatabaseRelationsTest extends TestCase
         });
 
         $orders->each(function($order){
-            if($order->customer){
-                $this->assertEquals('App\Models\Customer', get_class($order->customer));
-            }
-            else{
-                $this->assertEquals(null, $order->customer);
-            }
+            $this->assertEquals('App\Models\Customer', get_class($order->customer));
         });
     }
 
@@ -87,15 +81,6 @@ class DatabaseRelationsTest extends TestCase
 
         $customers->each(function($customer){
             $this->assertGreaterThan(0, $customer->addresses->count());
-        });
-
-        $addresses->each(function($address){
-            if($address->customer){
-                $this->assertEquals('App\Models\Customer', get_class($address->customer));
-            }
-            else{
-                $this->assertEquals(null, $address->customer);
-            }
         });
     }
 
@@ -112,12 +97,7 @@ class DatabaseRelationsTest extends TestCase
         });
 
         $woodlogs->each(function($woodlog){
-            if($woodlog->order){
-                $this->assertEquals('App\Models\Order', get_class($woodlog->order));
-            }
-            else{
-                $this->assertEquals(null, $woodlog->order);
-            }
+            $this->assertEquals('App\Models\Order', get_class($woodlog->order));
         });
     }
 
@@ -133,12 +113,7 @@ class DatabaseRelationsTest extends TestCase
         });
 
         $invoices->each(function($invoice){
-            if($invoice->order){
-                $this->assertEquals('App\Models\Order', get_class($invoice->order));
-            }
-            else{
-                $this->assertEquals(null, $invoice->order);
-            }
+            $this->assertEquals('App\Models\Order', get_class($invoice->order));
         });
     }
 
@@ -154,12 +129,7 @@ class DatabaseRelationsTest extends TestCase
         });
 
         $squaretimbers->each(function($squaretimber){
-            if($squaretimber->woodlog){
-                $this->assertEquals('App\Models\Order', get_class($squaretimber->woodlog));
-            }
-            else{
-                $this->assertEquals(null, $squaretimber->woodlog);
-            }
+            $this->assertEquals('App\Models\Woodlog', get_class($squaretimber->woodlog));
         });
     }
 
@@ -175,12 +145,7 @@ class DatabaseRelationsTest extends TestCase
         });
 
         $invoices->each(function($invoice){
-            if($invoice->paymentinfo){
-                $this->assertEquals('App\Models\Order', get_class($invoice->paymentinfo));
-            }
-            else{
-                $this->assertEquals(null, $invoice->paymentinfo);
-            }
+            $this->assertEquals('App\Models\Paymentinfo', get_class($invoice->paymentinfo));
         });
     }
 
@@ -196,12 +161,7 @@ class DatabaseRelationsTest extends TestCase
         });
 
         $inventoryitems->each(function($inventoryitem){
-            if($inventoryitem->supplier){
-                $this->assertEquals('App\Models\Order', get_class($inventoryitem->supplier));
-            }
-            else{
-                $this->assertEquals(null, $inventoryitem->supplier);
-            }
+            $this->assertEquals('App\Models\Supplier', get_class($inventoryitem->supplier));
         });
     }
 
@@ -216,14 +176,6 @@ class DatabaseRelationsTest extends TestCase
             $this->assertGreaterThan(0, $supplier->addresses->count());
         });
 
-        $addresses->each(function($address){
-            if($address->supplier){
-                $this->assertEquals('App\Models\Customer', get_class($address->supplier));
-            }
-            else{
-                $this->assertEquals(null, $address->supplier);
-            }
-        });
     }
 
     public function test_order_inventoryitem_relation()

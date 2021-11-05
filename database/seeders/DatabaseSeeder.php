@@ -89,20 +89,23 @@ class DatabaseSeeder extends Seeder
      */
     public function relateMany(Collection $hasManyCollection, Collection $belongsToCollection, String $relation, Int $iterations)
     {
-        
-        $hasManyCollection->each(function($hasManyElement)use($belongsToCollection, $relation, $iterations){
-            for ($i=0; $i < $this->faker->numberBetween(2, $iterations); $i++) { 
-                try{
-                    $randomBelongsToElement = $this->faker->randomElement($belongsToCollection);
-                    $hasManyElement->{$relation}()->save($randomBelongsToElement);
-                }
-                catch(Exception $e){
-                    echo 'relation of ' . get_class($hasManyElement) . ' ' 
-                    . $hasManyElement->id . ' with ' . get_class($randomBelongsToElement) . ' ' 
-                    . $randomBelongsToElement->id .  ' failed!';
-                }
+        if($hasManyCollection->count() < $belongsToCollection->count()) {
+            $this->recursiveHelper($belongsToCollection, $hasManyCollection, $relation);   
+        }
+        else{
+            echo "the hasManyCollection has to contain less items then the belongsToCollection!";
+        }
+    }
+
+    public function recursiveHelper($belongsToCollection, $hasManyCollection, $relation){
+        for ($i=0; $i < $belongsToCollection->count(); $i++) { 
+            if($i < $hasManyCollection->count()){
+                $hasManyCollection->get($i)->{$relation}()->save($belongsToCollection->get($i));
             }
-        });
-    
+            else if($belongsToCollection->count() > $i){
+                $belongsToCollection->shift($i);
+                $this->recursiveHelper($belongsToCollection, $hasManyCollection, $relation);
+            }
+        }
     }
 }
